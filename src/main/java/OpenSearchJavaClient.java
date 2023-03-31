@@ -13,28 +13,11 @@ import org.opensearch.client.transport.rest_client.RestClientTransport;
 
 public class OpenSearchJavaClient {
     public static void main(String[] args) throws Exception {
-        // No usamos seguridad, verdad?
-        // System.setProperty("javax.net.ssl.trustStore", "/full/path/to/keystore");
-        // System.setProperty("javax.net.ssl.trustStorePassword", "password-to-keystore");
 
         final HttpHost host = new HttpHost("https://localhost", 9200);
-        // final BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-
-        //Only for demo purposes. Don't specify your credentials in code.
-        // credentialsProvider.setCredentials(new AuthScope(host),
-        //       new UsernamePasswordCredentials("admin", "admin".toCharArray()));
-
-        //Initialize the client with SSL and TLS enabled
-        final RestClient restClient = RestClient.builder(host)
-                //.setHttpClientConfigCallback(new RestClientBuilder.HttpClientConfigCallback() {
-                //    @Override
-                //    public HttpAsyncClientBuilder customizeHttpClient(HttpAsyncClientBuilder httpClientBuilder) {
-                //        return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
-                //    }
-                //})
-                .build();
-
+        final RestClient restClient = RestClient.builder(host).build();
         final OpenSearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
         final OpenSearchClient client = new OpenSearchClient(transport);
+
     }
 }
