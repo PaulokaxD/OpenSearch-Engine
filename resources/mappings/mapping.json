@@ -1,0 +1,11 @@
+{
+  "mappings": {
+    "properties": {
+      "article_title":{
+        "type":"text",
+        "analyzer": "rebuilt_english"
+      }
+    }
+  }
+}
+
