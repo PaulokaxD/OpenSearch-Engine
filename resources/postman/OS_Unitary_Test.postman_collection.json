@@ -1,0 +1,69 @@
+{
+	"info": {
+		"_postman_id": "525c5382-37f2-47ce-b445-dcda8101f827",
+		"name": "OS_Unitary_Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26349549"
+	},
+	"item": [
+		{
+			"name": "Query article_title",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\": [\r\n                {\"match\":{\"article_title\":\"management\"}},\r\n                {\"match\":{\"article_title\":\"leukaemias\"}}\r\n            ]\r\n        }\r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Analyze article_title",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"The Specific mucosal IgA immunity in turkey poults infected with a turkey coronavirus.\",\r\n    \"field\": \"article_title\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_analyze",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_analyze"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
