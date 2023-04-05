@@ -4,6 +4,10 @@
       "article_title":{
         "type":"text",
         "analyzer": "rebuilt_english"
+      },
+      "abstract_text":{
+        "type":"text",
+        "analyzer": "english_analyzer"
       }
     }
   }

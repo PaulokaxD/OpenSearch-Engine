@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "525c5382-37f2-47ce-b445-dcda8101f827",
-		"name": "OS_Unitary_Test",
+		"_postman_id": "9c3f28da-472c-4c31-aa5a-c7d9a34f6a9f",
+		"name": "OS_Unitary_Test_aux",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26349549"
 	},
 	"item": [
 		{
-			"name": "Query article_title",
+			"name": "Query abstract_text",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -16,7 +16,12 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\": [\r\n                {\"match\":{\"article_title\":\"management\"}},\r\n                {\"match\":{\"article_title\":\"leukaemias\"}}\r\n            ]\r\n        }\r\n    }\r\n}"
+					"raw": "{\r\n    \"query\": {\r\n        \"match\":{\"abstract_text\":\"Respiratory problems due to covid-19\"}\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
 					"raw": "http://localhost:9200/articles/_search",
@@ -28,6 +33,38 @@
 					"path": [
 						"articles",
 						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Analyze abstract_text",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\":\"Respiratory problems due to covid-19\",\r\n    \"field\":\"abstract_text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_analyze",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_analyze"
 					]
 				}
 			},
@@ -60,6 +97,38 @@
 					"path": [
 						"articles",
 						"_analyze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query article_title",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\": [\r\n                {\"match\":{\"article_title\":\"management\"}},\r\n                {\"match\":{\"article_title\":\"leukaemias\"}}\r\n            ]\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_search"
 					]
 				}
 			},
