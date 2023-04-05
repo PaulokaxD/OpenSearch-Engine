@@ -7,70 +7,6 @@
 	},
 	"item": [
 		{
-			"name": "Query abstract_text",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"query\": {\r\n        \"match\":{\"abstract_text\":\"Respiratory problems due to covid-19\"}\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:9200/articles/_search",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9200",
-					"path": [
-						"articles",
-						"_search"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Analyze abstract_text",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"text\":\"Respiratory problems due to covid-19\",\r\n    \"field\":\"abstract_text\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:9200/articles/_analyze",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9200",
-					"path": [
-						"articles",
-						"_analyze"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Analyze article_title",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -97,6 +33,70 @@
 					"path": [
 						"articles",
 						"_analyze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query article_title",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\": [\r\n                {\"match\":{\"article_title\":\"management\"}},\r\n                {\"match\":{\"article_title\":\"leukaemias\"}}\r\n            ]\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\": [\r\n                {\"match\":{\"id\":\"32766\"}}\r\n            ]\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_search"
 					]
 				}
 			},
@@ -135,7 +135,7 @@
 			"response": []
 		},
 		{
-			"name": "Query id",
+			"name": "Analyze abstract_text",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -144,7 +144,39 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\": [\r\n                {\"match\":{\"id\":\"32766\"}}\r\n            ]\r\n        }\r\n    }\r\n}",
+					"raw": "{\r\n    \"text\":\"Respiratory problems due to covid-19\",\r\n    \"field\":\"abstract_text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_analyze",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_analyze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query abstract_text",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"match\":{\"abstract_text\":\"Respiratory problems due to covid-19\"}\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -165,7 +197,7 @@
 				}
 			},
 			"response": []
-		},
+		}
     
 	]
 }
