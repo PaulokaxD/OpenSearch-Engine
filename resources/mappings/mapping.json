@@ -1,9 +1,13 @@
 {
   "mappings": {
     "properties": {
+      "id":{
+        "type" : "text",
+        "analyzer": "autocomplete"
+      },
       "article_title":{
         "type":"text",
-        "analyzer": "rebuilt_english"
+        "analyzer": "english_analyzer"
       },
       "abstract_text":{
         "type":"text",

@@ -103,7 +103,7 @@
 			"response": []
 		},
 		{
-			"name": "Query article_title",
+			"name": "Analyze id",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -112,7 +112,39 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\": [\r\n                {\"match\":{\"article_title\":\"management\"}},\r\n                {\"match\":{\"article_title\":\"leukaemias\"}}\r\n            ]\r\n        }\r\n    }\r\n}",
+					"raw": "{\r\n    \"text\": \"pmid:14711331\",\r\n    \"field\": \"id\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_analyze",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_analyze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\": [\r\n                {\"match\":{\"id\":\"32766\"}}\r\n            ]\r\n        }\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -133,6 +165,7 @@
 				}
 			},
 			"response": []
-		}
+		},
+    
 	]
 }
