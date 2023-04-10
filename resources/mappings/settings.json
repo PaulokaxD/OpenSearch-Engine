@@ -1,12 +1,12 @@
 {
   "settings": {
-    "index": {
-      "number_of_replicas": 0
+    "index" : {
+      "number_of_replicas" : 0
     },
     "analysis": {
       "filter": {
         "english_stop": {
-          "type": "stop",
+          "type":"stop",
           "stopwords": "_english_"
         },
         "english_stemmer": {
@@ -19,13 +19,26 @@
         }
       },
       "analyzer": {
-        "rebuilt_english": {
+        "english_analyzer": {
           "tokenizer": "standard",
           "filter": [
             "english_possessive_stemmer",
             "lowercase",
             "english_stop",
             "english_stemmer"
+          ]
+        },
+        "autocomplete": {
+          "tokenizer": "autocomplete"
+        }
+      },
+      "tokenizer": {
+        "autocomplete": {
+          "type": "edge_ngram",
+          "min_gram": 1,
+          "max_gram": 9,
+          "token_chars": [
+            "digit"
           ]
         }
       }
