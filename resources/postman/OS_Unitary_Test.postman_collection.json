@@ -261,7 +261,45 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Query pub_types",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\":[\r\n                {\"match\":{\"pub_types\": \"Journal Article\"}},\r\n                {\"match\":{\"pub_types\":\"Research Support, Non-U.S. Gov't\"}}\r\n            ]\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_search/?explain=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_search",
+						""
+					],
+					"query": [
+						{
+							"key": "explain",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
 		}
-
 	]
 }
