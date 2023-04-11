@@ -19,6 +19,10 @@
       },
       "pub_types":{
         "type":"keyword"
+      },
+      "language":{
+        "type":"text",
+        "analyzer":"lang_expansion"
       }
     }
   }

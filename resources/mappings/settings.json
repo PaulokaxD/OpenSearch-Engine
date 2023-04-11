@@ -16,6 +16,42 @@
         "english_possessive_stemmer": {
           "type": "stemmer",
           "language": "possessive_english"
+        },
+        "lang_synonym":{
+          "type":"synonym",
+          "synonyms":[
+            "ara => Arabic",
+            "ben => Bengali",
+            "chi => Chinese",
+            "cze => Czech",
+            "dan => Danish",
+            "dut => Dutch",
+            "eng => English",
+            "fin => Finnish",
+            "fre => French",
+            "ger => German",
+            "gre => Greek",
+            "heb => Hebrew",
+            "hun => Hungarian",
+            "ita => Italian",
+            "jpn => Japanese",
+            "kor => Korean",
+            "nor => Norwegian",
+            "per => Persian",
+            "pol => Polish",
+            "por => Portuguese",
+            "rum => Romanian",
+            "rus => Russian",
+            "spa => Spanish",
+            "swe => Swedish",
+            "tha => Thai",
+            "tur => Turkish",
+            "ukr => Ukrainian",
+            "urd => Urdu",
+            "vie => Vietnamese",
+            "zho => Chinese (Mandarin)"
+          ]
+
         }
       },
       "analyzer": {
@@ -39,6 +75,10 @@
             "english_stop",
             "english_stemmer"
           ]
+        },
+        "lang_expansion":{
+          "tokenizer":"keyword",
+          "filter":["lang_synonym"]
         }
       },
       "tokenizer": {
