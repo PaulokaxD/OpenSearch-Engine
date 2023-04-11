@@ -12,6 +12,10 @@
       "abstract_text":{
         "type":"text",
         "analyzer": "english_analyzer"
+      },
+      "keywords":{
+        "type":"text",
+        "analyzer": "keyword_analyzer"
       }
     }
   }

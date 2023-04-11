@@ -197,7 +197,71 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Analyze keywords",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\":\"drug delivery\",\r\n    \"field\":\"keywords\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_analyze",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_analyze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query keywords",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"bool\":{\r\n            \"should\":[\r\n                {\"match\":{\"keywords\": \"covid-19\"}},\r\n                {\"match\":{\"keywords\":\"drug delivery\"}}\r\n            ]\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_search"
+					]
+				}
+			},
+			"response": []
 		}
-    
+
 	]
 }
