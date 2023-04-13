@@ -396,6 +396,44 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Aggregation keywords",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"aggs\": {\r\n    \"keywords\": {\r\n      \"terms\": { \"field\": \"keywords.keyword\" }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_search?filter_path=aggregations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "filter_path",
+							"value": "aggregations"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

@@ -15,7 +15,12 @@
       },
       "keywords":{
         "type":"text",
-        "analyzer": "keyword_analyzer"
+        "analyzer": "keyword_analyzer",
+        "fields":{
+          "keyword":{
+            "type":"keyword"
+          }
+        }
       },
       "pub_types":{
         "type":"keyword"
