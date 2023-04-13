@@ -27,7 +27,8 @@
       },
       "language":{
         "type":"text",
-        "analyzer":"lang_expansion"
+        "analyzer":"lang_expansion",
+        "fielddata":"true"
       },
       "pub_date":{
         "type": "date"
