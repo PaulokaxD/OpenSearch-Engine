@@ -23,6 +23,9 @@
       "language":{
         "type":"text",
         "analyzer":"lang_expansion"
+      },
+      "pub_date":{
+        "type": "date"
       }
     }
   }
