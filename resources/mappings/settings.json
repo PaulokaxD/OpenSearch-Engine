@@ -68,12 +68,9 @@
           "tokenizer": "autocomplete"
         },
         "keyword_analyzer":{
-          "tokenizer":"whitespace",
+          "tokenizer":"keyword",
           "filter": [
-            "english_possessive_stemmer",
-            "lowercase",
-            "english_stop",
-            "english_stemmer"
+            "lowercase"
           ]
         },
         "lang_expansion":{

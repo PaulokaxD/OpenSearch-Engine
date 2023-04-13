@@ -16,11 +16,7 @@
       "keywords":{
         "type":"text",
         "analyzer": "keyword_analyzer",
-        "fields":{
-          "keyword":{
-            "type":"keyword"
-          }
-        }
+        "fielddata":"true"
       },
       "pub_types":{
         "type":"keyword"
