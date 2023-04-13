@@ -510,6 +510,38 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Gigaquery",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"bool\": {\r\n            \"should\":[\r\n                {\"match\":{\"id\":{\"query\":\"32766\", \"boost\":4}}},\r\n                {\"match\":{\"article_title\":{\"query\":\"leukaemias\", \"boost\":3}}},\r\n                {\"match\":{\"keywords\":{\"query\":\"drug delivery\", \"boost\":2}}},\r\n                {\"match\":{\"abstract_text\":\"Respiratory problems due to covid-19\"}}\r\n            ]\r\n        }\r\n    },\r\n    \"aggs\": {\r\n        \"keywords\": {\r\n            \"terms\": {\r\n                \"field\": \"keywords\",\r\n                \"size\":15 \r\n            }\r\n        },\r\n        \"languages\": {\r\n            \"terms\": {\r\n                \"field\": \"language\",\r\n                \"size\":5 \r\n            }\r\n        },\r\n        \"publications_over_years\": {\r\n            \"date_histogram\": { \r\n                \"field\": \"pub_date\",\r\n                \"calendar_interval\": \"year\",\r\n                \"format\": \"yyyy\"\r\n            }\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/articles/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"articles",
+						"_search"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
