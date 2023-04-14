@@ -208,7 +208,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\":\"drug delivery\",\r\n    \"field\":\"keywords\"\r\n}",
+					"raw": "{\r\n    \"text\":\"Drug delivery\",\r\n    \"field\":\"keywords\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -407,7 +407,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"aggs\": {\r\n    \"keywords\": {\r\n      \"terms\": { \"field\": \"keywords.keyword\" }\r\n    }\r\n  }\r\n}",
+					"raw": "{\r\n  \"aggs\": {\r\n    \"keywords\": {\r\n      \"terms\": { \"field\": \"keywords\" }\r\n    }\r\n  }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
