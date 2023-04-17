@@ -22,4 +22,19 @@ public class JSONReader {
         }
         return articles;
     }
+
+    public static List<List<Article>> readFileIntoPartition(Path path, Integer partitionSize) throws IOException {
+        List<Article> collection = readFile(path);
+
+        List<List<Article>> partitions = new ArrayList<>();
+
+        for (int i = 0; i < collection.size(); i += partitionSize) {
+            partitions.add(collection.subList(i, Math.min(i + partitionSize, collection.size())));
+        }
+        return partitions;
+    }
+
+    public static Integer getFileNumber(Path path) throws IOException {
+        return readFile(path).size();
+    }
 }
