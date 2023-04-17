@@ -1,11 +1,15 @@
+package os.exercise.opensearch;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpHost;
 import org.opensearch.action.bulk.BulkRequest;
+import org.opensearch.action.bulk.BulkResponse;
 import org.opensearch.action.index.IndexRequest;
 import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.common.xcontent.XContentType;
+import os.exercise.pojo.Article;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,8 +34,11 @@ public class ArticlesIndexer {
                     .source(jsonArticle, XContentType.JSON);
 
             request.add(indexRequest);
-            client.bulk(request, RequestOptions.DEFAULT);
-            // TODO: Add logguer: "Number of failed requests: " + bulkResponse.hasFailures()
+            BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
+
+            if(bulkResponse.hasFailures()){
+                System.out.println("There was an error indexing this batch");
+            }
 
         }
 

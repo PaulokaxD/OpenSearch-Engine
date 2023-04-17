@@ -1,30 +1,35 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
+package os.exercise.io;
 
-import java.io.File;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import os.exercise.pojo.Article;
+
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JSONReader {
 
-    public static List<Article> readFile(Path path) throws IOException {
+    private JSONReader() {
+    }
+
+    public static List<Article> readArticlesFile(Path path) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<Article> articles = new ArrayList<>();
         String line;
-        File file = path.toFile();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        while ((line = reader.readLine()) != null) {
-            Article article = mapper.readValue(line, Article.class);
-            articles.add(article);
+        try(BufferedReader reader = Files.newBufferedReader(path)){
+            while ((line = reader.readLine()) != null) {
+                Article article = mapper.readValue(line, Article.class);
+                articles.add(article);
+            }
         }
         return articles;
     }
 
-    public static List<List<Article>> readFileIntoPartition(Path path, Integer partitionSize) throws IOException {
-        List<Article> collection = readFile(path);
+    public static List<List<Article>> readArticlesFileIntoPartition(Path path, Integer partitionSize) throws IOException {
+        List<Article> collection = readArticlesFile(path);
 
         List<List<Article>> partitions = new ArrayList<>();
 
@@ -35,6 +40,6 @@ public class JSONReader {
     }
 
     public static Integer getFileNumber(Path path) throws IOException {
-        return readFile(path).size();
+        return readArticlesFile(path).size();
     }
 }

@@ -1,6 +1,6 @@
-import com.fasterxml.jackson.annotation.JsonProperty;
+package os.exercise.pojo;
+
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.util.List;
@@ -78,12 +78,5 @@ public class Article {
 
     public void setPubTypes(List<String> pubTypes) {
         this.pubTypes = pubTypes;
-    }
-
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id='" + id + '\'' +
-                '}';
     }
 }

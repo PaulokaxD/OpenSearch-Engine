@@ -1,3 +1,9 @@
+package os.exercise.app;
+
+import os.exercise.io.JSONReader;
+import os.exercise.opensearch.ArticlesIndexer;
+import os.exercise.pojo.Article;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,7 +38,7 @@ public class Main {
                 System.out.println("Processing file " + path.toString());
 
                 int fileNumber = JSONReader.getFileNumber(path);
-                List<List<Article>> articlesBatches = JSONReader.readFileIntoPartition(path, N_INDEXING_FILES);
+                List<List<Article>> articlesBatches = JSONReader.readArticlesFileIntoPartition(path, N_INDEXING_FILES);
 
                 Integer nBatch = 1;
                 for(List<Article> articlesBatch : articlesBatches){
