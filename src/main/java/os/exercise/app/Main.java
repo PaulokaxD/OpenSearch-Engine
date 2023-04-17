@@ -28,33 +28,27 @@ public class Main {
                     .filter(path -> path.toString().endsWith(".json"))
                     .collect(Collectors.toList());
         } catch (IOException e){
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
         }
 
         ArticlesIndexer indexer = new ArticlesIndexer("localhost", 9200, "http");
         int nFile = 1;
-        try {
-            for(Path path : paths) {
-                System.out.println("Processing file " + path.toString());
+        for(Path path : paths) {
+            System.out.println("Processing file " + path.toString());
 
-                int fileNumber = JSONReader.getFileNumber(path);
-                List<List<Article>> articlesBatches = JSONReader.readArticlesFileIntoPartition(path, N_INDEXING_FILES);
+            int fileNumber = JSONReader.getFileNumber(path);
+            List<List<Article>> articlesBatches = JSONReader.readArticlesFileIntoPartition(path, N_INDEXING_FILES);
 
-                Integer nBatch = 1;
-                for(List<Article> articlesBatch : articlesBatches){
-                    indexer.bulkAppendArticles(INDEX_NAME, articlesBatch);
-                    System.out.println("File "+nFile+"/"+paths.size()+" -> "+
-                            Math.min(N_INDEXING_FILES*nBatch,fileNumber)+"/"+fileNumber);
-                    nBatch++;
-                }
-                nFile++;
+            Integer nBatch = 1;
+            for(List<Article> articlesBatch : articlesBatches){
+                indexer.bulkAppendArticles(INDEX_NAME, articlesBatch);
+                System.out.println("File "+nFile+"/"+paths.size()+" -> "+
+                        Math.min(N_INDEXING_FILES*nBatch,fileNumber)+"/"+fileNumber);
+                nBatch++;
             }
-        } catch (IOException e){
-            System.out.println(e.getStackTrace());
-        }finally {
-            indexer.close();
+            nFile++;
         }
-
+        indexer.close();
     }
 
 }

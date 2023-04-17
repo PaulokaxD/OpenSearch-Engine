@@ -23,23 +23,26 @@ public class ArticlesIndexer {
                 RestClient.builder(new HttpHost(host, port, scheme)));
     }
 
-    public void bulkAppendArticles(String index, List<Article> articles) throws IOException {
+    public void bulkAppendArticles(String index, List<Article> articles) {
         ObjectMapper mapper = new ObjectMapper();
 
         for (Article article : articles) {
-            BulkRequest request = new BulkRequest();
-            String jsonArticle = mapper.writeValueAsString(article);
+            try{
+                BulkRequest request = new BulkRequest();
+                String jsonArticle = mapper.writeValueAsString(article);
 
-            IndexRequest indexRequest = new IndexRequest(index)
-                    .source(jsonArticle, XContentType.JSON);
+                IndexRequest indexRequest = new IndexRequest(index)
+                        .source(jsonArticle, XContentType.JSON);
 
-            request.add(indexRequest);
-            BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
+                request.add(indexRequest);
+                BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
 
-            if(bulkResponse.hasFailures()){
-                System.out.println("There was an error indexing this batch");
+                if(bulkResponse.hasFailures()){
+                    System.out.println("There was an error indexing this batch");
+                }
+            }catch (IOException e){
+                e.printStackTrace();
             }
-
         }
 
     }
@@ -48,7 +51,7 @@ public class ArticlesIndexer {
         try{
             client.close();
         }catch (IOException e){
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
         }
     }
 }

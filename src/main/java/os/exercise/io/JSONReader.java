@@ -15,7 +15,7 @@ public class JSONReader {
     private JSONReader() {
     }
 
-    public static List<Article> readArticlesFile(Path path) throws IOException {
+    public static List<Article> readArticlesFile(Path path) {
         ObjectMapper mapper = new ObjectMapper();
         List<Article> articles = new ArrayList<>();
         String line;
@@ -24,11 +24,13 @@ public class JSONReader {
                 Article article = mapper.readValue(line, Article.class);
                 articles.add(article);
             }
+        }catch(IOException e){
+            e.printStackTrace();
         }
         return articles;
     }
 
-    public static List<List<Article>> readArticlesFileIntoPartition(Path path, Integer partitionSize) throws IOException {
+    public static List<List<Article>> readArticlesFileIntoPartition(Path path, Integer partitionSize) {
         List<Article> collection = readArticlesFile(path);
 
         List<List<Article>> partitions = new ArrayList<>();
@@ -39,7 +41,7 @@ public class JSONReader {
         return partitions;
     }
 
-    public static Integer getFileNumber(Path path) throws IOException {
+    public static Integer getFileNumber(Path path) {
         return readArticlesFile(path).size();
     }
 }
