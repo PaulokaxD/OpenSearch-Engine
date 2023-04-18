@@ -1,4 +1,4 @@
-package os.exercise.pojo;
+package os.exercise.models;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

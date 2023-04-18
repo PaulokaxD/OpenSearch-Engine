@@ -1,7 +1,7 @@
 package os.exercise.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import os.exercise.pojo.Article;
+import os.exercise.models.Article;
 
 import java.io.BufferedReader;
 import java.io.IOException;

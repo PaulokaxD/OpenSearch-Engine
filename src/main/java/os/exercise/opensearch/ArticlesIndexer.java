@@ -9,7 +9,7 @@ import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.common.xcontent.XContentType;
-import os.exercise.pojo.Article;
+import os.exercise.models.Article;
 
 import java.io.IOException;
 import java.util.List;

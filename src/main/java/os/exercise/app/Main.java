@@ -2,7 +2,7 @@ package os.exercise.app;
 
 import os.exercise.io.JSONReader;
 import os.exercise.opensearch.ArticlesIndexer;
-import os.exercise.pojo.Article;
+import os.exercise.models.Article;
 
 import java.io.IOException;
 import java.nio.file.Files;
