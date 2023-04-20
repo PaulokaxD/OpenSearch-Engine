@@ -1,6 +1,8 @@
 package os.exercise.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import os.exercise.models.Article;
 
 import java.io.BufferedReader;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JSONReader {
+
+    private static final Logger logger = LogManager.getLogger(JSONReader.class);
 
     private JSONReader() {
     }
@@ -25,7 +29,7 @@ public class JSONReader {
                 articles.add(article);
             }
         }catch(IOException e){
-            e.printStackTrace();
+            logger.error("There was an error reading the file {}: {}",path, e);
         }
         return articles;
     }
