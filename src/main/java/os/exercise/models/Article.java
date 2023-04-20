@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.util.List;
+import java.util.Objects;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Article {
@@ -78,5 +79,25 @@ public class Article {
 
     public void setPubTypes(List<String> pubTypes) {
         this.pubTypes = pubTypes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return Objects.equals(id, article.id) &&
+                Objects.equals(articleTitle, article.articleTitle) &&
+                Objects.equals(abstractText, article.abstractText) &&
+                Objects.equals(language, article.language) &&
+                Objects.equals(pubDate, article.pubDate) &&
+                Objects.equals(filterSources, article.filterSources) &&
+                Objects.equals(keywords, article.keywords) &&
+                Objects.equals(pubTypes, article.pubTypes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, articleTitle, abstractText, language, pubDate, filterSources, keywords, pubTypes);
     }
 }
