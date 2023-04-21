@@ -1,5 +1,7 @@
 package os.exercise.app;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import os.exercise.io.JSONReader;
 import os.exercise.opensearch.ArticlesIndexer;
 import os.exercise.models.Article;
@@ -17,6 +19,7 @@ public class Main {
 
     private static final Integer N_INDEXING_FILES = 100;
     private static final String INDEX_NAME = "articles";
+    private static final Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) {
         Path folderPath = Paths.get("data");
@@ -34,7 +37,7 @@ public class Main {
         ArticlesIndexer indexer = new ArticlesIndexer("localhost", 9200, "http");
         int nFile = 1;
         for(Path path : paths) {
-            System.out.println("Processing file " + path.toString());
+            logger.info("Processing file {}", path);
 
             int fileNumber = JSONReader.getFileNumber(path);
             List<List<Article>> articlesBatches = JSONReader.readArticlesFileIntoPartition(path, N_INDEXING_FILES);
@@ -42,8 +45,8 @@ public class Main {
             Integer nBatch = 1;
             for(List<Article> articlesBatch : articlesBatches){
                 indexer.bulkAppendArticles(INDEX_NAME, articlesBatch);
-                System.out.println("File "+nFile+"/"+paths.size()+" -> "+
-                        Math.min(N_INDEXING_FILES*nBatch,fileNumber)+"/"+fileNumber);
+                logger.info("File {}/{} -> {}/{},", nFile, paths.size(),
+                        Math.min(N_INDEXING_FILES*nBatch, fileNumber), fileNumber);
                 nBatch++;
             }
             nFile++;
