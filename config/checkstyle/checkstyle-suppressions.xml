@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.1//EN"
+        "https://checkstyle.org/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+
+    <!-- ************** -->
+    <!-- Generated Code -->
+    <!-- ************** -->
+    <suppress checks="[a-zA-Z0-9]*" files="[/\\]gen[/\\]"/>
+
+    <!-- ***** -->
+    <!-- Tests -->
+    <!-- ***** -->
+
+    <suppress checks="MagicNumber"              files="src[/\\]test[a-zA-Z]*[/\\]java[/\\].*"/>
+    <suppress checks="JavadocMethod"            files="src[/\\]test[a-zA-Z]*[/\\]java[/\\].*"/>
+    <suppress checks="ExecutableStatementCount" files="src[/\\]test[a-zA-Z]*[/\\]java[/\\].*"/>
+    <suppress checks="MethodLength"             files="src[/\\]test[a-zA-Z]*[/\\]java[/\\].*"/>
+
+    <!-- JUnit Rule fields must be public -->
+    <suppress checks="VisibilityModifier"       files="src[/\\]test[a-zA-Z]*[/\\]java[/\\].*Test.java"/>
+
+    <!-- Allows equals(null) for tests -->
+    <suppress checks="EqualsAvoidNull" files="src[/\\]test[a-zA-Z]*[/\\]java[/\\].*"/>
+</suppressions>
