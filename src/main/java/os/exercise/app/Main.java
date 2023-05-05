@@ -1,7 +1,11 @@
 package os.exercise.app;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.HttpHost;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.opensearch.client.RestClient;
+import org.opensearch.client.RestHighLevelClient;
 import os.exercise.io.JSONReader;
 import os.exercise.opensearch.ArticlesIndexer;
 import os.exercise.models.Article;
@@ -20,21 +24,22 @@ public class Main {
     private static final Integer N_INDEXING_FILES = 100;
     private static final String INDEX_NAME = "articles";
     private static final Logger logger = LogManager.getLogger(Main.class);
+    private static final String DATA_PATH = "data";
 
     public static void main(String[] args) {
-        Path folderPath = Paths.get("data");
-        List<Path> paths = new ArrayList<>();
+        Path folderPath = Paths.get(DATA_PATH);
+        List<Path> paths = getPaths(folderPath);
 
-        try (Stream<Path> pathStream = Files.walk(folderPath)) {
-            paths = pathStream
-                    .filter(Files::isRegularFile)
-                    .filter(path -> path.toString().endsWith(".json"))
-                    .collect(Collectors.toList());
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(new HttpHost("localhost", 9200, "http")));
 
-        ArticlesIndexer indexer = new ArticlesIndexer("localhost", 9200, "http");
+        ObjectMapper mapper = new ObjectMapper();
+        ArticlesIndexer indexer = new ArticlesIndexer(client, mapper);
+
+        indexFile(paths, indexer);
+    }
+
+    public static void indexFile(List<Path> paths, ArticlesIndexer indexer) {
         int nFile = 1;
         for(Path path : paths) {
             logger.info("Processing file {}", path);
@@ -51,7 +56,20 @@ public class Main {
             }
             nFile++;
         }
-        indexer.close();
+    }
+
+    public static List<Path> getPaths(Path folderPath) {
+        List<Path> paths = new ArrayList<>();
+
+        try (Stream<Path> pathStream = Files.walk(folderPath)) {
+            paths = pathStream
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.toString().endsWith(".json"))
+                    .collect(Collectors.toList());
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return paths;
     }
 
 }
