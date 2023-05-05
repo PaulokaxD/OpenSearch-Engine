@@ -13,10 +13,7 @@ import os.exercise.models.Article;
  */
 class ArticleTest {
 
-    /**
-     * Article instance.
-     */
-    Article article;
+    private Article article;
 
     @BeforeEach
     void setUp(){

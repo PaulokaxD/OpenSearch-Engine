@@ -1,5 +1,15 @@
 package os.junit.opensearch;
 
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpHost;
@@ -16,40 +26,33 @@ import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.index.shard.ShardId;
-import os.exercise.models.Article;
-import os.exercise.opensearch.ArticlesIndexer;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import os.exercise.models.Article;
+import os.exercise.opensearch.ArticlesIndexer;
 
+/**
+ * Unitary tests for the ArticlesIndexer class.
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ArticlesIndexerTest {
 
-    String index;
+    private String index;
 
-    Article article1;
-    Article article2;
-    Article wrongArticle;
+    private Article article1;
+    private Article article2;
 
-    BulkItemResponse response1;
-    BulkItemResponse response2;
-    BulkItemResponse failedResponse;
+    private BulkItemResponse response1;
+    private BulkItemResponse response2;
+    private BulkItemResponse failedResponse;
 
     @BeforeAll
     void setUp(){
         article1 = new Article();
         article2 = new Article();
-        wrongArticle = new Article();
 
         index = "articles";
 
