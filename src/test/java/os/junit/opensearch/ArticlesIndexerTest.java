@@ -158,7 +158,7 @@ class ArticlesIndexerTest {
         BulkResponse bulkResponse = new BulkResponse(responses,2L);
         List<Article> articlesBatch = Arrays.asList(article1, article2);
 
-        List<String> failures = indexer.getErrorMessages(bulkResponse, articlesBatch);
+        List<String> failures = indexer.getNotIndexedArticles(bulkResponse, articlesBatch);
         assertEquals(0, failures.size());
     }
 
@@ -173,7 +173,7 @@ class ArticlesIndexerTest {
         BulkResponse bulkResponse = new BulkResponse(responses,2L);
         List<Article> articlesBatch = Arrays.asList(article1, article2);
 
-        List<String> failures = indexer.getErrorMessages(bulkResponse, articlesBatch);
+        List<String> failures = indexer.getNotIndexedArticles(bulkResponse, articlesBatch);
         assertTrue(failures.size() > 0);
     }
 
