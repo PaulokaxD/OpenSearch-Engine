@@ -3,7 +3,7 @@ package os.junit.io;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import os.exercise.io.JSONReader;
+import os.exercise.io.JsonReader;
 import os.exercise.models.Article;
 
 import java.nio.file.Path;
@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class JSONReaderTest {
+class JsonReaderTest {
 
     Path articlesFilePath;
     Article article1;
@@ -62,13 +62,13 @@ class JSONReaderTest {
 
     @Test
     void givenArticlesFilePathWhenReadArticlesFileThenReturnArticlesList() {
-        List<Article> actual = JSONReader.readArticlesFile(articlesFilePath);
+        List<Article> actual = JsonReader.readArticlesFile(articlesFilePath);
         assertEquals(articles, actual);
     }
 
     @Test
     void givenArticlesFilePathAndPartitionSizeWhenReadArticlesFileIntoPartitionThenSuccess() {
-        List<List<Article>> actual = JSONReader.readArticlesFileIntoPartition(articlesFilePath,1);
+        List<List<Article>> actual = JsonReader.readArticlesFileIntoPartition(articlesFilePath,1);
         assertEquals(3, actual.size());
         for(List<Article> batch : actual){
             assertEquals(1, batch.size());
@@ -78,13 +78,13 @@ class JSONReaderTest {
     @Test
     void givenNonExistingFileWhenReadArticlesFileThenFailure() {
         Path wrongPath = Paths.get("src/test/resources/non-existing-file.json");
-        List<Article> actual = JSONReader.readArticlesFile(wrongPath);
+        List<Article> actual = JsonReader.readArticlesFile(wrongPath);
         assertEquals(0, actual.size());
     }
 
     @Test
     void givenArticlesFilePathWhenGetFileNumberThenSuccess() {
-        assertEquals(3, JSONReader.getFileNumber(articlesFilePath));
+        assertEquals(3, JsonReader.getFileNumber(articlesFilePath));
     }
 
 }
