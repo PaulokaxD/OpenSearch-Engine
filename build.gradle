@@ -40,7 +40,7 @@ sonarqube {
         property("sonar.projectKey", "OpenSearchClient")
         property("sonar.projectName",'OpenSearchClient')
         property("sonar.host.url", "http://localhost:9000")
-        property("sonar.token","")
+        property("sonar.token","sqp_60164ef4997829ed6ebe35a86744b8e5eaf41aab")
     }
 }
 
