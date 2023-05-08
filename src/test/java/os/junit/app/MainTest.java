@@ -1,7 +1,10 @@
 package os.junit.app;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
-import os.exercise.app.Main;
+import org.junit.platform.commons.util.ExceptionUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,21 +12,23 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import os.exercise.app.Main;
 
+/**
+ * Unitary tests for the Main class.
+ */
 class MainTest {
 
     @Test
     void givenAValidPathWhenGetPathsThenSuccess(){
-        Path folderPath = Paths.get("data"); //TODO
+        Path folderPath = Paths.get("src/test/resources");
         List<Path> paths = Main.getPaths(folderPath);
 
         long count = -1;
         try (Stream<Path> countingPaths = Files.list(folderPath)) {
             count = countingPaths.count();
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionUtils.readStackTrace(e);
         }
 
         assertEquals(count, paths.size());
@@ -38,7 +43,4 @@ class MainTest {
         List<Path> paths = Main.getPaths(folderPath);
         assertEquals(0, paths.size());
     }
-
-
-// TODO: COMO TESTEO indexFile Y Main? Tendria que ser teset de integracion entonces no?
 }
