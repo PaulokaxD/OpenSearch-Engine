@@ -1,6 +1,8 @@
 package os.junit.models;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -66,5 +68,21 @@ class ArticleTest {
     void whenSetAndGetPubTypesThenSuccess() {
         article.setPubTypes(Arrays.asList("Journal Article","Research Support, Non-U.S. Gov't"));
         assertEquals(Arrays.asList("Journal Article","Research Support, Non-U.S. Gov't"), article.getPubTypes());
+    }
+
+    @Test
+    void whenCompareArticleWithItselfThenSuccess() {
+        Article sameArticle = article;
+        assertEquals(article, sameArticle);
+    }
+
+    @Test
+    void whenCompareArticleWithNullThenFailure() {
+        assertNotEquals(article, null);
+    }
+
+    @Test
+    void whenCompareArticleWithOtherThenFailure() {
+        assertNotEquals(article, new Object());
     }
 }
