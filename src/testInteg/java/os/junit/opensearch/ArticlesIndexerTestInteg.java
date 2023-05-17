@@ -14,7 +14,10 @@ import org.apache.http.HttpHost;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.opensearch.action.admin.indices.refresh.RefreshRequest;
+import org.opensearch.action.admin.indices.refresh.RefreshResponse;
 import org.opensearch.action.bulk.BulkRequest;
+import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.testcontainers.OpensearchContainer;
@@ -32,7 +35,7 @@ import os.exercise.models.Article;
 import os.exercise.opensearch.ArticlesIndexer;
 
 /**
- * Unitary tests for the ArticlesIndexer class.
+ * Integration tests for the ArticlesIndexer class.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ArticlesIndexerTestInteg {
@@ -49,6 +52,7 @@ class ArticlesIndexerTestInteg {
     private Integer port;
     private String indexURL;
     private String searchURL;
+    private String matchAllQuery;
 
     private Article article1;
     private Article article2;
@@ -72,7 +76,7 @@ class ArticlesIndexerTestInteg {
 
         mapper = new ObjectMapper();
 
-        Unirest.setTimeouts(60000, 60000);
+        matchAllQuery = "{\r\n    \"query\": {\r\n        \"match_all\": {}\r\n    }\r\n}";
         String mappingsQuery = String.join("",
                 "{\"settings\":{\"index\":{\"number_of_replicas\":0},",
                 "\"analysis\":{\"filter\":{\"english_stop\":{\"type\":\"stop\",",
@@ -106,10 +110,8 @@ class ArticlesIndexerTestInteg {
                 "\"analyzer\":\"lang_expansion\",\"fielddata\":\"true\"},",
                 "\"pub_date\":{\"type\":\"date\"}}}}");
 
-        Unirest.put(indexURL)
-                .header("Content-Type", "application/json")
-                .body(mappingsQuery)
-                .asString();
+        Unirest.setTimeouts(0, 0);
+        applyHttpInstruction(indexURL, mappingsQuery);
     }
 
     @Test
@@ -123,6 +125,7 @@ class ArticlesIndexerTestInteg {
         BulkRequest request = indexer.getBulkRequest(index, articles);
 
         assertTrue(indexer.indexArticles(articles, request));
+        refreshIndex(client, index);
 
         int hits = getHits();
 
@@ -158,25 +161,37 @@ class ArticlesIndexerTestInteg {
         BulkRequest request = indexer.getBulkRequest(index, failedArticles);
 
         assertTrue(indexer.indexArticles(failedArticles, request));
+        refreshIndex(client, index);
 
         int hits = getHits();
+        int correctFilesNumber = failedArticles.size() - 1;
 
-        assertEquals(failedArticles.size() - 1, hits);
+        assertEquals(correctFilesNumber, hits);
 
         clearIndex();
     }
 
     private int getHits() throws UnirestException, JsonProcessingException {
-        HttpResponse<String> response = Unirest.post(searchURL)
-                .header("Content-Type", "application/json")
-                .body("{\r\n    \"query\": {\r\n        \"match_all\": {}\r\n    }\r\n}")
-                .asString();
+        HttpResponse<String> response = applyHttpInstruction(searchURL, matchAllQuery);
 
         JsonNode jsonResponse = mapper.readTree(response.getBody());
         return Integer.parseInt(jsonResponse.findValue("hits").findValue("total").findValue("value").toString());
     }
 
-    private void clearIndex() {
+    private void clearIndex() throws UnirestException {
+        String deleteURL = String.format("%s/_delete_by_query", indexURL);
+        applyHttpInstruction(deleteURL, matchAllQuery);
+    }
 
+    private HttpResponse<String> applyHttpInstruction(String url, String body) throws UnirestException {
+        return Unirest.post(url)
+                .header("Content-Type", "application/json")
+                .body(body)
+                .asString();
+    }
+
+    private void refreshIndex(RestHighLevelClient client, String index) throws IOException {
+        RefreshRequest refreshRequest = new RefreshRequest(index);
+        client.indices().refresh(refreshRequest, RequestOptions.DEFAULT);
     }
 }
