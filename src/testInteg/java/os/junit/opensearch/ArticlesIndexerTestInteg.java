@@ -14,63 +14,47 @@ import org.apache.http.HttpHost;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.opensearch.action.admin.indices.refresh.RefreshRequest;
-import org.opensearch.action.admin.indices.refresh.RefreshResponse;
 import org.opensearch.action.bulk.BulkRequest;
 import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.RestHighLevelClient;
-import org.opensearch.testcontainers.OpensearchContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 
 import os.exercise.io.JsonReader;
 import os.exercise.models.Article;
 import os.exercise.opensearch.ArticlesIndexer;
+import os.junit.configuration.OpenSearchContainerConfiguration;
+import os.junit.extensions.OpenSearchContainerSetupExtension;
 
 /**
  * Integration tests for the ArticlesIndexer class.
  */
+@ExtendWith(OpenSearchContainerSetupExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ArticlesIndexerTestInteg {
 
-    private static final DockerImageName OS_IMAGE = DockerImageName.parse("opensearchproject/opensearch:latest");
-
-    @Container
-    private OpensearchContainer osContainer = new OpensearchContainer(OS_IMAGE);
-
-    private Path articlesPath;
-    private String index;
-    private String hostname;
-    private String scheme;
-    private Integer port;
+    private Path articlesPath = Paths.get("src\\test\\resources", "articles-example.json");
+    private String index = "articles";
+    private String hostname = OpenSearchContainerConfiguration.HOSTNAME;
+    private String scheme  = OpenSearchContainerConfiguration.SCHEME;
     private String indexURL;
     private String searchURL;
     private String matchAllQuery;
 
-    private Article article1;
-    private Article article2;
-
     private ObjectMapper mapper;
+    private RestHighLevelClient client;
+    private ArticlesIndexer indexer;
 
     @BeforeAll
     void setUp() throws UnirestException {
-        articlesPath = Paths.get("src\\test\\resources", "articles-example.json");
+        int port = OpenSearchContainerConfiguration.PORT;
 
-        article1 = new Article();
-        article2 = new Article();
-
-        index = "articles";
-        scheme = "http";
-        osContainer.start();
-        hostname = osContainer.getHost();
-        port = osContainer.getFirstMappedPort();
         indexURL = String.format("http://%s:%d/%s", hostname, port, index);
         searchURL = String.format("%s/_search", indexURL);
 
@@ -112,15 +96,14 @@ class ArticlesIndexerTestInteg {
 
         Unirest.setTimeouts(0, 0);
         applyHttpInstruction(indexURL, mappingsQuery);
+
+        client = new RestHighLevelClient(
+                RestClient.builder(new HttpHost(hostname, port, scheme)));
+        indexer = new ArticlesIndexer(client, mapper);
     }
 
     @Test
     void givenCorrectJSONWhenIndexArticlesThenSuccess() throws IOException, UnirestException {
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(new HttpHost(hostname, port, scheme)));
-
-        ArticlesIndexer indexer = new ArticlesIndexer(client, mapper);
-
         List<Article> articles = JsonReader.readArticlesFile(articlesPath);
         BulkRequest request = indexer.getBulkRequest(index, articles);
 
@@ -136,31 +119,27 @@ class ArticlesIndexerTestInteg {
 
     @Test
     void givenWrongJSONWhenIndexArticlesThenFailure() throws IOException {
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(new HttpHost(hostname, port, scheme)));
-//      Throw(new IOException());
+        RestHighLevelClient wrongClient = new RestHighLevelClient(
+                RestClient.builder(new HttpHost(hostname, 8080, scheme)));
+        ArticlesIndexer wrongIndexer = new ArticlesIndexer(wrongClient, mapper);
 
-        ArticlesIndexer indexer = new ArticlesIndexer(client, mapper);
-        List<Article> articlesBatch = Arrays.asList(article1, article2);
-        BulkRequest request = indexer.getBulkRequest(index, articlesBatch);
+        List<Article> failedArticles = JsonReader.readArticlesFile(articlesPath);
+        BulkRequest request = wrongIndexer.getBulkRequest(index, failedArticles);
 
-        assertFalse(indexer.indexArticles(articlesBatch, request));
+        assertFalse(wrongIndexer.indexArticles(failedArticles, request));
     }
 
     @Test
     void givenWrongArticleWhenIndexArticlesThenSuccess() throws IOException, UnirestException {
-        RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(new HttpHost(hostname, port, scheme)));
-
         Article wrongArticle = new Article();
         wrongArticle.setPubDate("notADate");
-
-        ArticlesIndexer indexer = new ArticlesIndexer(client, mapper);
         List<Article> failedArticles = JsonReader.readArticlesFile(articlesPath);
         failedArticles.add(wrongArticle);
+
         BulkRequest request = indexer.getBulkRequest(index, failedArticles);
 
         assertTrue(indexer.indexArticles(failedArticles, request));
+
         refreshIndex(client, index);
 
         int hits = getHits();
@@ -190,8 +169,8 @@ class ArticlesIndexerTestInteg {
                 .asString();
     }
 
-    private void refreshIndex(RestHighLevelClient client, String index) throws IOException {
-        RefreshRequest refreshRequest = new RefreshRequest(index);
-        client.indices().refresh(refreshRequest, RequestOptions.DEFAULT);
+    private void refreshIndex(RestHighLevelClient restClient, String refreshedIndex) throws IOException {
+        RefreshRequest refreshRequest = new RefreshRequest(refreshedIndex);
+        restClient.indices().refresh(refreshRequest, RequestOptions.DEFAULT);
     }
 }
