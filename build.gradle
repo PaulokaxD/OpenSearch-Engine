@@ -23,14 +23,6 @@ sourceSets {
     }
 }
 
-// TODO: PREGUNTAR ALVARO
-//configurations {
-//    integrationImplementation
-//    testImplementation {
-//        extendsFrom integrationImplementation
-//    }
-//}
-
 dependencies {
     implementation 'org.opensearch.client:opensearch-rest-high-level-client:2.6.0'
     implementation 'org.opensearch.client:opensearch-java:2.3.0'
